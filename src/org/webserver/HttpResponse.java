@@ -49,7 +49,7 @@ public class HttpResponse {
 		out.println("");
 		// Send the HTML page
 		out.println("<H1>Error</H1>");
-		out.flush();
+		this.flush();
 
 	}
 
@@ -82,7 +82,7 @@ public class HttpResponse {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		out.flush();
+		this.flush();
 
 	}
 
@@ -95,6 +95,10 @@ public class HttpResponse {
 		out.println("");
 		// Send the HTML page
 		out.println("<H1>" + "OK,operation was succesfull" + " exist </H1>");
-		out.flush();
+		this.flush();
 	}
+	void flush(){
+		this.out.flush();
+	}
+	
 }

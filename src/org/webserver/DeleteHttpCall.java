@@ -10,10 +10,7 @@ public class DeleteHttpCall implements HttpCall {
 	@Override
 	public void execute(HttpRequest req, HttpResponse resp) {
 
-		String uri = req.getUri();
-
-		String filePath = FILESYSTEM + "\\" + uri;
-
+		String filePath = FILESYSTEM + req.getUri();
 		File file = new File(filePath);
 
 		if (file.exists()) {
