@@ -7,7 +7,6 @@ public class HTPPRequestFactory {
 
 		if (request.getMethod().equals(Method.GET.toString().toLowerCase())) {
 			instance = new GetHttpCall();
-
 		}
 		if (request.getMethod().equals(Method.PUT.toString().toLowerCase())) {
 			instance = new PutHttpCall();

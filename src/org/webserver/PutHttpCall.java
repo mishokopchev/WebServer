@@ -4,14 +4,15 @@ import java.io.File;
 import java.io.IOException;
 
 public class PutHttpCall implements HttpCall {
-
+	
+	Validator validator;
+	
 	@Override
 	public void execute(HttpRequest req, HttpResponse resp) {
 
 		String uri = req.getUri();
 
 		String filePath = FILESYSTEM + uri;
-
 		File file = new File(filePath);
 
 		try {
@@ -27,6 +28,7 @@ public class PutHttpCall implements HttpCall {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			resp.sendError(HTTPCode.ERROR);
 		}
 
 	}

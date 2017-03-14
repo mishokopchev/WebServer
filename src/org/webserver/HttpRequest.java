@@ -9,20 +9,9 @@ import java.util.Arrays;
 public class HttpRequest {
 
 	private BufferedReader buffer;
-
-	private StringBuilder raw;
-
 	private String method;
 	private String uri;
 	private String protocol;
-
-	public StringBuilder getRaw() {
-		return raw;
-	}
-
-	public void setRaw(StringBuilder raw) {
-		this.raw = raw;
-	}
 
 	public String getMethod() {
 		return method;
@@ -57,10 +46,7 @@ public class HttpRequest {
 			try {
 
 				String line = buffer.readLine();
-				System.out.println(line);
-
 				String[] params = line.split(" ");
-				System.out.println(Arrays.toString(params));
 
 				this.setMethod(params[0].trim().toLowerCase());
 				this.setProtocol(params[2].trim().toLowerCase());

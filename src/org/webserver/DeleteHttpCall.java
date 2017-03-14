@@ -17,7 +17,7 @@ public class DeleteHttpCall implements HttpCall {
 			file.delete();
 			resp.sendOK();
 		} else {
-			resp.sendError();
+			resp.sendError(HTTPCode.ERROR);
 		}
 
 	}

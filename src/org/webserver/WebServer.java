@@ -1,9 +1,6 @@
 package org.webserver;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -25,11 +22,17 @@ public class WebServer {
 		try (ServerSocket serverSocket = new ServerSocket(port)) {
 			while (true) {
 				Socket socket = serverSocket.accept();
-				new ServerWorkerThread(socket).start();
+				this.handlerService.execute(new ServerWorkerThread(socket));
 			}
 		} catch (IOException e) {
 			System.err.println("Could not listen on port " + port);
 			System.exit(-1);
+		} finally {
+
+			if (handlerService != null && handlerService.isShutdown() && handlerService.isTerminated()) {
+				handlerService.shutdown();
+			}
+			System.out.println(";The webserver was closed!");
 		}
 	}
 

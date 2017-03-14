@@ -6,80 +6,56 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 public class HttpResponse {
 
-	private BufferedWriter buffer;
 	private PrintWriter out;
 	private BufferedReader reader;
 
 	public HttpResponse(OutputStream outputStream) {
 		this.out = new PrintWriter(outputStream);
-		this.buffer = new BufferedWriter(new OutputStreamWriter(outputStream));
 	}
 
-	public BufferedWriter getBuffer() {
-		return buffer;
-	}
-
-	public void setBuffer(BufferedWriter buffer) {
-		this.buffer = buffer;
-	}
-
-	public PrintWriter getOut() {
-		return out;
-	}
-
-	public void setOut(PrintWriter out) {
-		this.out = out;
-	}
-
-
-	public void sendError() {
-
-		out.println("HTTP/1.0 404 ");
+	public void sendHeaders(HTTPCode code) {
+		
+		out.println("HTTP/1.0");
+		out.println(code);
 		out.println("Content-Type: text/html");
 		out.println("Server: Bot");
 		// this blank line signals the end of the headers
 		out.println("");
+	}
+
+	public void sendError(HTTPCode code) {
+		sendHeaders(code);
 		// Send the HTML page
 		out.println("<H1>Error</H1>");
 		this.flush();
-
 	}
 
 	public void sendFile(String filename) {
-
-		out.println("HTTP/1.0 404 ");
-		out.println("Content-Type: text/html");
-		out.println("Server: Bot");
-		// this blank line signals the end of the headers
-		out.println("");
+			
+		sendHeaders(HTTPCode.OK);
 		// Send the HTML page
-
+		
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(new File(filename));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		// Construct BufferedReader from InputStreamReader
 		reader = new BufferedReader(new InputStreamReader(fis));
 
 		String line = null;
-		
+
 		try {
 			while ((line = reader.readLine()) != null)
 				out.println("<H5>" + line + " exist </H5>");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.flush();
@@ -88,17 +64,14 @@ public class HttpResponse {
 
 	public void sendOK() {
 
-		out.println("HTTP/1.0 200 ");
-		out.println("Content-Type: text/html");
-		out.println("Server: Bot");
-		// this blank line signals the end of the headers
-		out.println("");
+		sendHeaders(HTTPCode.OK);
 		// Send the HTML page
 		out.println("<H1>" + "OK,operation was succesfull" + " exist </H1>");
 		this.flush();
 	}
-	void flush(){
+
+	void flush() {
 		this.out.flush();
 	}
-	
+
 }

@@ -6,11 +6,18 @@ public class Filter {
 
 	public static synchronized boolean validate(HttpRequest req, HttpResponse resp) {
 
-		boolean validation;
+		boolean method = false, uri = false, protocol = false;
 
-		validation = req.getMethod().matches(METHOD_REGEX) ? true : false;
+		method = req.getMethod().matches(METHOD_REGEX) ? true : false;
 
-		return validation;
+		if (req.getUri() != null && req.getUri().length() > 1) {
+			uri = true;
+		}
+		if (req.getProtocol() != null && req.getProtocol().contains("http")) {
+			protocol = true;
+		}
+
+		return (method && uri && protocol);
 
 	}
 }
