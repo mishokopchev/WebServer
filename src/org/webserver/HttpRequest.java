@@ -3,8 +3,8 @@ package org.webserver;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpRequest {
 
@@ -12,6 +12,9 @@ public class HttpRequest {
 	private String method;
 	private String uri;
 	private String protocol;
+
+	private Map<String, String[]> headers;
+	private Map<String, String[]> parameters;
 
 	public String getMethod() {
 		return method;
@@ -44,19 +47,40 @@ public class HttpRequest {
 		synchronized (buffer) {
 
 			try {
-
 				String line = buffer.readLine();
-				String[] params = line.split(" ");
+				generateLine(line);
 
-				this.setMethod(params[0].trim().toLowerCase());
-				this.setProtocol(params[2].trim().toLowerCase());
-				this.setUri(params[1].trim().toLowerCase());
+				this.headers = new HashMap<String, String[]>();
+				this.parameters = new HashMap<String, String[]>();
+				String lines = null;
+				while ((line = buffer.readLine()) != null && !line.isEmpty()) {
+
+					
+				}
 
 			} catch (Exception e) {
 
 			}
 
 		}
+
+	}
+
+	public void generateLine(String line) {
+		if (line != null || line.isEmpty()) {
+
+			String[] params = line.split(" ");
+
+			this.setMethod(params[0].trim().toLowerCase());
+			this.setProtocol(params[2].trim().toLowerCase());
+			this.setUri(params[1].trim().toLowerCase());
+
+		} else {
+			//
+		}
+	}
+
+	public void parseHeaders(String line) {
 
 	}
 
