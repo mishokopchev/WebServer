@@ -21,22 +21,23 @@ public class ServerWorkerThread extends Thread {
 			HttpRequest request = new HttpRequest(remote.getInputStream());
 			HttpResponse response = new HttpResponse(remote.getOutputStream());
 			System.err.println("Remote object" + remote);
-			
+
 			// remote is now the connected socket
 			System.out.println("Connection, sending data.");
-			//BufferedReader in = new BufferedReader(new InputStreamReader(remote.getInputStream()));
-			//PrintWriter out = new PrintWriter(remote.getOutputStream());
+			// BufferedReader in = new BufferedReader(new
+			// InputStreamReader(remote.getInputStream()));
+			// PrintWriter out = new PrintWriter(remote.getOutputStream());
 
 			// read the data sent. We basically ignore it,
 			// stop reading once a blank line is hit. This
 			// blank line signals the end of the client HTTP
 			// headers.
 
-//			String str = ".";
-//			while (!str.equals("")) {
-//				str = in.readLine();
-//				System.out.println(str);
-//			}
+			// String str = ".";
+			// while (!str.equals("")) {
+			// str = in.readLine();
+			// System.out.println(str);
+			// }
 
 			boolean validRequest = Filter.validate(request, response);
 			if (!validRequest) {
