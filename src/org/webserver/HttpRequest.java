@@ -53,11 +53,15 @@ public class HttpRequest {
 				this.headers = new HashMap<String, String[]>();
 				this.parameters = new HashMap<String, String[]>();
 				String lines = null;
-				while ((line = buffer.readLine()) != null && !line.isEmpty()) {
 
-					
+				while ((lines = buffer.readLine()) != null) {
+					if (lines.isEmpty()) {
+						break;
+					}
+					this.parseHeaders(lines);
 				}
 
+				
 			} catch (Exception e) {
 
 			}
@@ -81,6 +85,11 @@ public class HttpRequest {
 	}
 
 	public void parseHeaders(String line) {
+		if (line != null && !line.isEmpty()) {
+			String name = line.substring(0, line.indexOf(":")).trim();
+			String[] params = line.substring(name.length() + 2).split(",");
+			headers.put(name, params);
+		}
 
 	}
 
