@@ -4,18 +4,18 @@ public class HTPPRequestFactory {
 
 	public static HttpCall getInstance(HttpRequest request) {
 		HttpCall instance = null;
-
-		if (request.getMethod().equals(Method.GET.toString().toLowerCase())) {
+		String method = request.getMethod().toLowerCase();
+		switch (method) {
+		case "get":
 			instance = new GetHttpCall();
-		}
-		if (request.getMethod().equals(Method.PUT.toString().toLowerCase())) {
+			break;
+		case "put":
 			instance = new PutHttpCall();
-		}
-		if (request.getMethod().equals(Method.DELETE.toString().toLowerCase())) {
+			break;
+		case "delete":
 			instance = new DeleteHttpCall();
 
 		}
-
 		return instance;
 
 	}
