@@ -3,7 +3,9 @@ package org.webserver;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HttpRequest {
@@ -14,7 +16,8 @@ public class HttpRequest {
 	private String protocol;
 
 	private Map<String, String[]> headers;
-	private Map<String, String[]> parameters;
+
+	private List<String> parameters;
 
 	public String getMethod() {
 		return method;
@@ -39,8 +42,17 @@ public class HttpRequest {
 	public void setProtocol(String protocol) {
 		this.protocol = protocol;
 	}
+	
+	public List<String> getParameters(){
+		//List<String> params;
+//		params = this.parameters.stream().map( )
+		return this.parameters; 
+	}
 
 	public HttpRequest(InputStream reader) {
+
+		this.headers = new HashMap<String, String[]>();
+		this.parameters = new ArrayList<String>();
 
 		buffer = new BufferedReader(new InputStreamReader(reader));
 
@@ -50,8 +62,6 @@ public class HttpRequest {
 				String line = buffer.readLine();
 				generateLine(line);
 
-				this.headers = new HashMap<String, String[]>();
-				this.parameters = new HashMap<String, String[]>();
 				String lines = null;
 
 				while ((lines = buffer.readLine()) != null) {
@@ -61,7 +71,6 @@ public class HttpRequest {
 					this.parseHeaders(lines);
 				}
 
-				
 			} catch (Exception e) {
 
 			}
@@ -70,18 +79,28 @@ public class HttpRequest {
 
 	}
 
-	public void generateLine(String line) {
-		if (line != null || line.isEmpty()) {
+	public void generateLine(String line) throws Exception {
+		if (line != null && !line.isEmpty()) {
 
 			String[] params = line.split(" ");
 
 			this.setMethod(params[0].trim().toLowerCase());
 			this.setProtocol(params[2].trim().toLowerCase());
 			this.setUri(params[1].trim().toLowerCase());
+			this.setParameters(params[1].trim().toLowerCase());
 
 		} else {
-			//
+			throw new Exception();
 		}
+	}
+
+	private void setParameters(String lower) {
+		String[] entries = lower.split("/");
+		for (String entry : entries) {
+			if (entry != null && !entry.isEmpty())
+				this.parameters.add(entry);
+		}
+
 	}
 
 	public void parseHeaders(String line) {

@@ -20,7 +20,7 @@ public class HttpResponse {
 	}
 
 	public void sendHeaders(HTTPCode code) {
-		
+
 		out.println("HTTP/1.0");
 		out.println(code);
 		out.println("Content-Type: text/html");
@@ -37,10 +37,10 @@ public class HttpResponse {
 	}
 
 	public void sendFile(String filename) {
-			
+
 		sendHeaders(HTTPCode.OK);
 		// Send the HTML page
-		
+
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(new File(filename));
@@ -54,7 +54,7 @@ public class HttpResponse {
 
 		try {
 			while ((line = reader.readLine()) != null)
-				out.println("<H5>" + line + " exist </H5>");
+				out.println("<H5>" + line + "  </H5>");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -66,12 +66,31 @@ public class HttpResponse {
 
 		sendHeaders(HTTPCode.OK);
 		// Send the HTML page
-		out.println("<H1>" + "OK,operation was succesfull" + " exist </H1>");
+		out.println("<H1>" + "OK,operation was succesfull" + " </H1>");
 		this.flush();
 	}
 
 	void flush() {
 		this.out.flush();
+	}
+
+	public void sendDirectory(String filePath) {
+		File directory = new File(filePath);
+
+		if (directory != null) {
+			sendHeaders(HTTPCode.OK);
+			out.println("<H1>" + "You requested a folder" + " </H1>");
+			out.println("<H1>" + "Contet:" + " </H1>");
+
+			String[] entries = directory.list();
+			for (String currentFile : entries) {
+				out.println("<H4>*" + currentFile + " </H4>");
+			}
+
+			this.flush();
+		} else
+			sendError(HTTPCode.ERROR);
+
 	}
 
 }

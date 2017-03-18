@@ -13,17 +13,23 @@ public class GetHttpCall implements HttpCall {
 
 	@Override
 	public void execute(HttpRequest req, HttpResponse resp) {
-
+		// this server works only with txt files and folders
 		try {
 			String filePath = FILESYSTEM + req.getUri();
-			File file = new File(filePath);
 
-			if (!file.exists() || !validator.validateFile(filePath)) {
+			if (!validator.validateFile(filePath)) {
 				resp.sendError(HTTPCode.ERROR);
 				return;
 			}
 
-			resp.sendFile(filePath);
+			File file = new File(filePath);
+			
+			if(file.isDirectory()){
+				resp.sendDirectory(filePath);
+			}else{				
+				resp.sendFile(filePath);
+			}
+			
 		} catch (Exception e) {
 			resp.sendError(HTTPCode.ERROR);
 		}
