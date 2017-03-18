@@ -4,6 +4,8 @@ public class HTPPRequestFactory {
 
 	public static HttpCall getInstance(HttpRequest request) {
 		HttpCall instance = null;
+		
+		
 		String method = request.getMethod().toLowerCase();
 		switch (method) {
 		case "get":
