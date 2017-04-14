@@ -104,6 +104,7 @@ public class HttpRequest {
 	}
 
 	public void parseHeaders(String line) {
+		
 		if (line != null && !line.isEmpty()) {
 			String name = line.substring(0, line.indexOf(":")).trim();
 			String[] params = line.substring(name.length() + 2).split(",");
