@@ -12,7 +12,7 @@ public class HTPPRequestFactory {
 			instance = new GetHttpCall();
 			break;
 		case "put":
-			instance = new PutHttpCall();
+			instance = new PutHttpCall(request.getBody());
 			break;
 		case "delete":
 			instance = new DeleteHttpCall();

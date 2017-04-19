@@ -1,6 +1,8 @@
 package org.webserver;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +10,13 @@ import java.util.List;
 public class PutHttpCall implements HttpCall {
 
 	private List<String> params = new ArrayList<String>();
+	private String body;
+
 	private static Validator validator;
+
+	public PutHttpCall(String body) {
+		this.body = body;
+	}
 
 	static {
 		validator = new Validator() {
@@ -32,11 +40,11 @@ public class PutHttpCall implements HttpCall {
 		}
 
 		this.params = req.getParameters();
-		File file = new File(filePath);
 
 		try {
 			boolean putted = this.put();
 			if (putted) {
+				this.writeContent(FILESYSTEM + req.getUri());
 				resp.sendOK();
 				return;
 
@@ -49,10 +57,6 @@ public class PutHttpCall implements HttpCall {
 			resp.sendError(HTTPCode.ERROR);
 		}
 
-	}
-
-	private boolean isDirectory(File file) {
-		return file.isDirectory();
 	}
 
 	private boolean fileExist(File file) {
@@ -70,13 +74,12 @@ public class PutHttpCall implements HttpCall {
 
 			if (!this.fileExist(file)) {
 				try {
-					if(builder.endsWith(".txt")){
+					if (builder.endsWith(".txt")) {
 						file.createNewFile();
-					}
-					else{
+					} else {
 						file.mkdir();
 					}
-					
+
 				} catch (IOException e) {
 					e.printStackTrace();
 					return false;
@@ -84,6 +87,22 @@ public class PutHttpCall implements HttpCall {
 			}
 		}
 		return true;
+	}
+
+	private void writeContent(String file) {
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter(file));
+			writer.write(this.body);
+
+		} catch (IOException e) {
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (IOException e) {
+			}
+		}
 	}
 
 }
