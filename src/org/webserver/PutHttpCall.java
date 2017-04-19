@@ -15,7 +15,9 @@ public class PutHttpCall implements HttpCall {
 	private static Validator validator;
 
 	public PutHttpCall(String body) {
-		this.body = body;
+		if (body == null) {
+			this.body = body;
+		}
 	}
 
 	static {
@@ -90,6 +92,11 @@ public class PutHttpCall implements HttpCall {
 	}
 
 	private void writeContent(String file) {
+
+		if (file == null) {
+			return;
+		}
+
 		BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
